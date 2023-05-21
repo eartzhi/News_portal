@@ -1,0 +1,12 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+{{post.header }}
+{% endblock title %}
+
+{% block content %}
+{{ post.text }}
+<hr>
+<small> {{ post.author.nick_name }}</small>
+{% endblock content %}
