@@ -1,12 +1,16 @@
 <!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
 
 {% block title %}
-{{post.header }}
+{{post.header|censored }}
 {% endblock title %}
 
 {% block content %}
-{{ post.text }}
+{{ post.text|censored }}
 <hr>
-<small> {{ post.author.nick_name }}</small>
+<small><p> {{ post.author.nick_name }} </p>
+ ({{ post.creation_time|date:'m.d.Y' }})</small>
+
 {% endblock content %}
