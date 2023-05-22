@@ -9,5 +9,5 @@ def censored(text: str, vocabulary=None) -> str:
         vocabulary = ['долг', 'Долг', 'дефиц',
                       'Дефиц', 'беда', 'Беда']
     for word in vocabulary:
-        text = text.replace(word, '*' * len(word))
+        text = text.replace(word, word[0] + '*' * (len(word) - 1))
     return text
