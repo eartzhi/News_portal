@@ -21,14 +21,14 @@ class PostsFilter(FilterSet):
 
     from_creation_time = DateTimeFilter(
         field_name='creation_time',
-        label='Со времени',
+        label='С даты',
         lookup_expr='gte',
         widget=DateTimeInput(attrs={'type': 'date'})
     )
 
     to_creation_time = DateFilter(
         field_name='creation_time',
-        label='До времени',
+        label='До даты',
         lookup_expr='lte',
         widget=DateTimeInput(attrs={'type': 'date'})
     )
