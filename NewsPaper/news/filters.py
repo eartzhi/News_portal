@@ -45,7 +45,6 @@ class PostsFilter(FilterSet):
         lookup_expr='icontains',
     )
 
-
     class Meta:
         model = Post
         fields = [
