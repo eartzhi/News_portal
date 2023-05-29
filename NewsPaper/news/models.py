@@ -9,6 +9,9 @@ class Author(models.Model):
     rating = models.IntegerField(default=0)
     post_count = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.nick_name
+
     def update_rating(self):
         post_rating = 0
         comment_rating = 0
