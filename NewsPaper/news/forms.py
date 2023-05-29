@@ -11,7 +11,6 @@ class PostsForm(forms.ModelForm):
                                               label='Категории поста')
     author = forms.ModelChoiceField(queryset=Author.objects.all(),
                                               label='Автор поста')
-    post_type = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
         model = Post
@@ -79,6 +78,6 @@ class ArticlesEditForm(forms.ModelForm):
         post_type = cleaned_data.get("post_type")
         if post_type != 'A':
             raise ValidationError(
-                "По этой ссылке вы можете редактировать только новость."
+                "По этой ссылке вы можете редактировать только статью."
             )
         return cleaned_data

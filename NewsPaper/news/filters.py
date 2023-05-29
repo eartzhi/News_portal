@@ -33,14 +33,26 @@ class PostsFilter(FilterSet):
         widget=DateTimeInput(attrs={'type': 'date'})
     )
 
+    text = CharFilter(
+        field_name='text',
+        label='Текст статьи содержит',
+        lookup_expr='icontains',
+    )
+
     header = CharFilter(
         field_name='header',
         label='Заголовок содержит',
         lookup_expr='icontains',
     )
 
-    text = CharFilter(
-        field_name='text',
-        label='Текст статьи содержит',
-        lookup_expr='icontains',
-    )
+
+    class Meta:
+        model = Post
+        fields = [
+            'text',
+            'header',
+            'author',
+            'post_type',
+            'from_creation_time',
+            'to_creation_time'
+        ]

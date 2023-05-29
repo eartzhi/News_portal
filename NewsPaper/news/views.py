@@ -1,3 +1,4 @@
+from django.http import HttpResponseForbidden
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
 from .models import Post
@@ -44,8 +45,8 @@ class NewsCreate(CreateView):
     template_name = 'create_form.html'
 
     def form_valid(self, form):
-        product = form.save(commit=False)
-        product.post_type = 'N'
+        post = form.save(commit=False)
+        post.post_type = 'N'
         return super().form_valid(form)
 
 
@@ -75,6 +76,28 @@ class ArticlesEdit(UpdateView):
 class NewsDelete(DeleteView):
     model = Post
     template_name = 'delete_form.html'
-    success_url = reverse_lazy('product_list')
+    success_url = reverse_lazy('posts_list')
+
+    def form_valid(self, form):
+        post = self.get_object()
+        if post.post_type != 'N':
+            return HttpResponseForbidden(
+                "По этой ссылке вы можете удалить только новость"
+            )
+        else:
+            return super().form_valid(form)
 
 
+class ArticlesDelete(DeleteView):
+    model = Post
+    template_name = 'delete_form.html'
+    success_url = reverse_lazy('posts_list')
+
+    def form_valid(self, form):
+        post = self.get_object()
+        if post.post_type != 'A':
+            return HttpResponseForbidden(
+                "По этой ссылке вы можете удалить только статью"
+            )
+        else:
+            return super().form_valid(form)
