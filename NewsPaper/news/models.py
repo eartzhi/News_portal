@@ -87,4 +87,4 @@ class Comment(models.Model):
         self.rating -= 1
         self.save()
 
-# заполение в файле News_portal\NewsPaper\module_D5.py
+# заполнение в файле News_portal\NewsPaper\module_D5.py
