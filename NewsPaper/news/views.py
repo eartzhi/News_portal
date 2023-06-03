@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
@@ -61,13 +62,13 @@ class ArticlesCreate(CreateView):
         return super().form_valid(form)
 
 
-class NewsEdit(UpdateView):
+class NewsEdit(LoginRequiredMixin, UpdateView):
     form_class = NewsEditForm
     model = Post
     template_name = 'update_form.html'
 
 
-class ArticlesEdit(UpdateView):
+class ArticlesEdit(LoginRequiredMixin, UpdateView):
     form_class = ArticlesEditForm
     model = Post
     template_name = 'update_form.html'
