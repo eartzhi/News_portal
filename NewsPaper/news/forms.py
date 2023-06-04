@@ -1,6 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import Post, Category, Author
+from allauth.account.forms import SignupForm
+from django.contrib.auth.models import Group
 
 
 class PostsForm(forms.ModelForm):
@@ -81,3 +83,12 @@ class ArticlesEditForm(forms.ModelForm):
                 "По этой ссылке вы можете редактировать только статью."
             )
         return cleaned_data
+
+
+class BasicSignupForm(SignupForm):
+
+    def save(self, request):
+        user = super(BasicSignupForm, self).save(request)
+        common_group = Group.objects.get(name='common')
+        common_group.user_set.add(user)
+        return user

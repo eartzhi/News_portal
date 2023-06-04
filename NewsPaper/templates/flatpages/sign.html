@@ -18,15 +18,6 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about">О нас</a></li>
-                           {% if request.user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="/posts/logout/"> Выйти </a></li>
-                           {% endif %}
-                           {% if not request.user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="/accounts/login/"> Войти </a></li>
-                           {% endif %}
-                           {% if is_not_author %}
-                        <li class="nav-item"><a class="nav-link" href="/posts/upgrade/"> Стать автором </a></li>
-                           {% endif %}
                         <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
                     </ul>
                     <form class="d-flex">

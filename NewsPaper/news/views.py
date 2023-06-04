@@ -7,6 +7,9 @@ from .filters import PostsFilter
 from .forms import PostsForm, NewsEditForm, ArticlesEditForm
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 class PostList(ListView):
@@ -15,6 +18,12 @@ class PostList(ListView):
     template_name = 'posts.html'
     context_object_name = 'posts'
     paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.\
+            filter(name = 'authors').exists()
+        return context
 
 
 class PostDetail(DetailView):
@@ -102,3 +111,12 @@ class ArticlesDelete(DeleteView):
             )
         else:
             return super().form_valid(form)
+
+
+@login_required
+def upgrade_me(request):
+    user = request.user
+    premium_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        premium_group.user_set.add(user)
+    return redirect('/posts')
