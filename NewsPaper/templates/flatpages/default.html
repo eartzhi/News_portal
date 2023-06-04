@@ -8,6 +8,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         {% load static %}
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+            <title>{% block title %} {% endblock title %}</title>
     </head>
     <body>
         <!-- Navigation-->
@@ -17,6 +18,7 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Оглавление</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about">О нас</a></li>
                            {% if request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="/posts/logout/"> Выйти </a></li>
@@ -39,7 +41,7 @@
             <div class="container px-4 px-lg-5 my-5">
                 <div class="row gx-4 gx-lg-5 align-items-center">
                     <div class="col-md-6">
-                        <h1 class="display-5 fw-bolder"><small>{% block title %} {% endblock title %}</small> </h1>
+                        <h1 class="display-5 fw-bolder"><small></small> </h1>
                         <div class="fs-5 mb-5">
                         </div>
                         <p class="lead"> {% block content %} {% endblock content %} </p>

@@ -8,6 +8,8 @@
 {% endblock title %}
 
 {% block content %}
+<h1>{{post.header|censored }}</h1>
+<hr>
 {{ post.text|censored }}
 <hr>
 <small><p> {{ post.author.nick_name }} </p>

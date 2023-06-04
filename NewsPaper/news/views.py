@@ -1,4 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, \
+    PermissionRequiredMixin
 from django.http import HttpResponseForbidden
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
@@ -31,6 +32,12 @@ class PostDetail(DetailView):
     template_name = 'post.html'
     context_object_name = 'post'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.\
+            filter(name = 'authors').exists()
+        return context
+
 
 class SearchPost(ListView):
     model = Post
@@ -49,7 +56,8 @@ class SearchPost(ListView):
         return context
 
 
-class NewsCreate(CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post', )
     form_class = PostsForm
     model = Post
     template_name = 'create_form.html'
@@ -60,7 +68,8 @@ class NewsCreate(CreateView):
         return super().form_valid(form)
 
 
-class ArticlesCreate(CreateView):
+class ArticlesCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('news.add_post', )
     form_class = PostsForm
     model = Post
     template_name = 'create_form.html'
@@ -71,13 +80,15 @@ class ArticlesCreate(CreateView):
         return super().form_valid(form)
 
 
-class NewsEdit(LoginRequiredMixin, UpdateView):
+class NewsEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post', )
     form_class = NewsEditForm
     model = Post
     template_name = 'update_form.html'
 
 
-class ArticlesEdit(LoginRequiredMixin, UpdateView):
+class ArticlesEdit(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post', )
     form_class = ArticlesEditForm
     model = Post
     template_name = 'update_form.html'
