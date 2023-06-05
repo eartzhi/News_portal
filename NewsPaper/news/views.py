@@ -80,14 +80,14 @@ class ArticlesCreate(PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class NewsEdit(PermissionRequiredMixin, UpdateView):
+class NewsEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = ('news.change_post', )
     form_class = NewsEditForm
     model = Post
     template_name = 'update_form.html'
 
 
-class ArticlesEdit(PermissionRequiredMixin, UpdateView):
+class ArticlesEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = ('news.change_post', )
     form_class = ArticlesEditForm
     model = Post
