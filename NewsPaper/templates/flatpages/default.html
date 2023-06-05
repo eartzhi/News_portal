@@ -22,8 +22,7 @@
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about">О нас</a></li>
                            {% if request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="/posts/logout/"> Выйти </a></li>
-                           {% endif %}
-                           {% if not request.user.is_authenticated %}
+                           {% else %}
                         <li class="nav-item"><a class="nav-link" href="/accounts/login/"> Войти </a></li>
                            {% endif %}
                            {% if is_not_author %}
