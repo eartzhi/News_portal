@@ -1,9 +1,8 @@
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 from .views import PostList, PostDetail, SearchPost, NewsCreate, \
-   ArticlesCreate, NewsEdit, ArticlesEdit, NewsDelete, ArticlesDelete, \
-   upgrade_me
-
+    ArticlesCreate, NewsEdit, ArticlesEdit, NewsDelete, ArticlesDelete, \
+    upgrade_me, Account
 
 urlpatterns = [
    path('', PostList.as_view(), name='posts_list'),
@@ -20,4 +19,8 @@ urlpatterns = [
         LogoutView.as_view(template_name='logout.html'),
         name='logout'),
    path('upgrade/', upgrade_me, name='upgrade'),
+   path('user/<int:pk>', Account.as_view(success_url='/'),
+        name='account'),
+   # path('user/subscribe', Subscription.as_view(success_url='/'),
+   #       name='subscription'),
 ]

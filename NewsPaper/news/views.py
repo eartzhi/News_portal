@@ -1,14 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse, Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
-from .models import Post
+from .models import Post, Category
 from .filters import PostsFilter
-from .forms import PostsForm, NewsEditForm, ArticlesEditForm
+from .forms import PostsForm, NewsEditForm, ArticlesEditForm, AccountForm
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
@@ -131,3 +131,23 @@ def upgrade_me(request):
     if not request.user.groups.filter(name='authors').exists():
         premium_group.user_set.add(user)
     return redirect('/posts')
+
+
+class Account(LoginRequiredMixin, UpdateView):
+    form_class = AccountForm
+    model = User
+    template_name = 'account_form.html'
+    context_object_name = 'user'
+
+    def get_object(self, *args, **kwargs):
+        obj = super(Account, self).get_object(*args, **kwargs)
+        if not obj.id == self.request.user.id:
+            raise Http404
+        return obj
+
+
+# class Subscription(LoginRequiredMixin, UpdateView):
+#     form_class = SubscriptionForm
+#     model = Category
+#     template_name = 'account_form.html'
+

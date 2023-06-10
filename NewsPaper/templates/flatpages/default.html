@@ -22,6 +22,8 @@
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about">О нас</a></li>
                            {% if request.user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="/posts/logout/"> Выйти </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/posts/user/{{ request.user.id }}"> Личный кабинет </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/posts/user/subscribe"> Подписки </a></li>
                            {% else %}
                         <li class="nav-item"><a class="nav-link" href="/accounts/login/"> Войти </a></li>
                            {% endif %}
