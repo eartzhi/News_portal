@@ -1,1 +1,1 @@
-EMAIL_PASSWORD = 'tiygrpcvrazgwgzi'
+EMAIL_PASSWORD = 'rkrhezddmfatsbxq'

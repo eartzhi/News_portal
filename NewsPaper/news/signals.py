@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 
 from .models import Post, PostCategory
 from django.conf import settings
+import time
 
 
 def email_sender(subject, from_email, recipient_list, html_content):
@@ -35,10 +36,14 @@ def post_create_notify(sender, instance, **kwargs):
         for category in categories:
             subscribers = category.subscriber.all()
             for subscriber in subscribers:
-                subscribers_emails += subscriber.email
-    email_sender(subject=instance.text[:50],
-                 from_email=settings.EMAIL_DEFAULT_FROM_EMAIL,
-                 recipient_list=subscribers_emails, html_content=html_content)
+                subscribers_emails += [subscriber.email]
+
+    for email in set(subscribers_emails):
+        time.sleep(5)
+        email_sender(subject=instance.header,
+                     from_email=settings.EMAIL_DEFAULT_FROM_EMAIL,
+                     recipient_list=[email],
+                     html_content=html_content)
 
     # for email in subscribers_emails:
     #     email_sender(subject=instance.text[:50],

@@ -157,7 +157,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
 
 EMAIL_HOST = 'smtp.yandex.ru'
@@ -165,7 +165,7 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = 'news.portalzhigunov'
 EMAIL_HOST_PASSWORD = EMAIL_PASSWORD
 EMAIL_USE_SSL = True
-EMAIL_DEFAULT_FROM_EMAIL = 'news.portalzhigunov.yandex.ru'
+DEFAULT_FROM_EMAIL = 'news.portalzhigunov@yandex.ru'
 
 SITE_URL = 'http://127.0.0.1:8000/'
 
