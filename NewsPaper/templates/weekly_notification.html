@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Рассылка</title>
+</head>
+<body>
+    <h1>Добрый вечер! Вот публикации за неделю по вашим категориям :</h1>
+    {% for post in posts %}
+        <p></p><a class="nav-link" href="{{ SITE_URL }}{{ post.get_absolute_url }}">{{post.header}} </a>
+    {% endfor %}
+</body>
+</html>

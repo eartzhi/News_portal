@@ -39,9 +39,9 @@ def post_create_notify(sender, instance, **kwargs):
                 subscribers_emails += [subscriber.email]
 
     for email in set(subscribers_emails):
-        time.sleep(5)
+        time.sleep(3) # достал меня яндекс спам фильтр
         email_sender(subject=instance.header,
-                     from_email=settings.EMAIL_DEFAULT_FROM_EMAIL,
+                     from_email=settings.DEFAULT_FROM_EMAIL,
                      recipient_list=[email],
                      html_content=html_content)
 
