@@ -10,6 +10,7 @@ class PostsForm(forms.ModelForm):
                            label='Текст поста')
     header = forms.CharField(widget=forms.Textarea, label='Заголовок поста')
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(),
+                                              widget=forms.CheckboxSelectMultiple,
                                               label='Категории поста')
     author = forms.ModelChoiceField(queryset=Author.objects.all(),
                                     label='Автор поста')
@@ -29,6 +30,7 @@ class NewsEditForm(forms.ModelForm):
                            label='Текст новости')
     header = forms.CharField(widget=forms.Textarea, label='Заголовок новости')
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(),
+                                              widget=forms.CheckboxSelectMultiple,
                                               label='Категории новости')
     author = forms.ModelChoiceField(queryset=Author.objects.all(),
                                     label='Автор новости')
@@ -60,6 +62,7 @@ class ArticlesEditForm(forms.ModelForm):
     header = forms.CharField(widget=forms.Textarea,
                              label='Заголовок статьи')
     category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(),
+                                              widget=forms.CheckboxSelectMultiple,
                                               label='Категории статьи')
     author = forms.ModelChoiceField(queryset=Author.objects.all(),
                                     label='Автор статьи')
@@ -101,9 +104,6 @@ class AccountForm(forms.ModelForm):
                                  label='Имя', required=False)
     last_name = forms.CharField(max_length=150, widget=forms.TextInput,
                                 label='Фамилия', required=False)
-    category = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple,
-        label='Подписка на категории', required=False)
 
     class Meta:
         model = User
@@ -111,9 +111,7 @@ class AccountForm(forms.ModelForm):
             'username',
             'first_name',
             'last_name',
-            'category',
         ]
-
 
 # class SubscriptionForm(forms.ModelForm):
 #     subscriber = forms.ModelMultipleChoiceField(

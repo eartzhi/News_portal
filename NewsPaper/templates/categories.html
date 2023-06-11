@@ -1,0 +1,64 @@
+<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+<!-- Название у нас будет products -->
+{% block title %}
+Подписка
+{% endblock title %}
+
+{% block content %}
+   {% if categories %}
+
+               <h2>Подписаться на категории :</h2>
+               <br>
+               {% for category in categories %}
+                   {% if request.user not in category.subscriber.all %}
+                       <h5><a class="nav-link" href="/posts/{{ category.id }}/subscribe">
+                       {{ category.category }} </a></h5>
+                       <p></p>
+                   {% endif %}
+               {% endfor %}
+           <br>
+           <hr>
+           <br>
+
+
+           <h2>Отписаться от категорий :</h2>
+               <br>
+           {% for category in categories %}
+               {% if request.user in category.subscriber.all %}
+                   <h5><a class="nav-link" href="/posts/{{ category.id }}/unsubscribe">
+                   {{ category.category }} </a></h5>
+                   <p></p>
+               {% endif %}
+           {% endfor %}
+
+   {% else %}
+       <h2>Категории отсутствуют</h2>
+   {% endif %}
+               <br>
+               <br>
+               <br>
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
+
+{% endblock content %}

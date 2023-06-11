@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
+from django.core.mail import send_mail
 from django.http import HttpResponseForbidden, HttpResponse, Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
@@ -77,6 +78,15 @@ class ArticlesCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.post_type = 'A'
+        send_mail(
+            subject=f'bla bla ,la',
+            # имя клиента и дата записи будут в теме для удобства
+            message='bla bla ,la',  # сообщение с кратким описанием проблемы
+            from_email='news.portalzhigunov@yandex.ru',
+            # здесь указываете почту, с которой будете отправлять (об этом попозже)
+            recipient_list=['zhigunovam@gmail.com', ]
+            # здесь список получателей. Например, секретарь, сам врач и т. д.
+        )
         return super().form_valid(form)
 
 
@@ -151,3 +161,25 @@ class Account(LoginRequiredMixin, UpdateView):
 #     model = Category
 #     template_name = 'account_form.html'
 
+class Subscription(ListView):
+    model = Category
+    ordering = 'category'
+    template_name = 'categories.html'
+    context_object_name = 'categories'
+    paginate_by = 5
+
+
+@login_required
+def subscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscriber.add(user)
+    return redirect('/posts/user/subscribe')
+
+
+@login_required
+def unsubscribe(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscriber.remove(user)
+    return redirect('/posts/user/subscribe')
