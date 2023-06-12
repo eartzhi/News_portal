@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.http import HttpResponseForbidden, HttpResponse, Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView
-from .models import Post, Category
+from .models import Post, Category, Author
 from .filters import PostsFilter
 from .forms import PostsForm, NewsEditForm, ArticlesEditForm, AccountForm
 from django.urls import reverse_lazy
@@ -140,6 +140,7 @@ def upgrade_me(request):
     premium_group = Group.objects.get(name='authors')
     if not request.user.groups.filter(name='authors').exists():
         premium_group.user_set.add(user)
+        Author.objects.create(nick_name=user.username, user=user)
     return redirect('/posts')
 
 

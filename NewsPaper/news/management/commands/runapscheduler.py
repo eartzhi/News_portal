@@ -28,23 +28,24 @@ def my_job():
                                  values_list('category__subscriber__email', flat=True)))
 
     for email in subscribers_email:
-        user_categories = User.objects.filter(email=email).\
-            values_list('category', flat=True)
-        user_posts = set(posts.filter(category__in=user_categories))
+        if email is not None:
+            user_categories = User.objects.filter(email=email).\
+                values_list('category', flat=True)
+            user_posts = set(posts.filter(category__in=user_categories))
 
-        html_content = render_to_string(
-            'weekly_notification.html',
-            {
+            html_content = render_to_string(
+                'weekly_notification.html',
+                {
                 'posts': user_posts,
                 'SITE_URL': settings.SITE_URL
 
-            }
-        )
-        time.sleep(3)  # достал меня яндекс спам фильтр
-        email_sender(subject='Еженедельная рассылка',
-                     from_email=settings.DEFAULT_FROM_EMAIL,
-                     recipient_list=[email],
-                     html_content=html_content)
+                }
+            )
+            time.sleep(3)  # достал меня яндекс спам фильтр
+            email_sender(subject='Еженедельная рассылка',
+                         from_email=settings.DEFAULT_FROM_EMAIL,
+                         recipient_list=[email],
+                         html_content=html_content)
 
 
 # функция, которая будет удалять неактуальные задачи
@@ -63,7 +64,7 @@ class Command(BaseCommand):
         # добавляем работу нашему задачнику
         scheduler.add_job(
             my_job,
-            trigger=CronTrigger(day_of_week='mon', hour='00', minute='17'),
+            trigger=CronTrigger(day_of_week='sun', hour='17', minute='00'),
             # То же, что и интервал, но задача тригера таким образом более понятна django
             id="my_job",  # уникальный айди
             max_instances=1,
