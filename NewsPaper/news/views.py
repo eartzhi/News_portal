@@ -1,9 +1,10 @@
+from datetime import timedelta, datetime
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.http import HttpResponseForbidden, HttpResponse, Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
-    DeleteView
+    DeleteView, View
 from .models import Post, Category, Author
 from .filters import PostsFilter
 from .forms import PostsForm, NewsEditForm, ArticlesEditForm, AccountForm
@@ -12,6 +13,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from .tasks import post_create_notify
 
 
 class PostList(ListView):
@@ -66,6 +68,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.post_type = 'N'
+        post_create_notify(post)
         return super().form_valid(form)
 
 
@@ -78,15 +81,7 @@ class ArticlesCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.post_type = 'A'
-        send_mail(
-            subject=f'bla bla ,la',
-            # имя клиента и дата записи будут в теме для удобства
-            message='bla bla ,la',  # сообщение с кратким описанием проблемы
-            from_email='news.portalzhigunov@yandex.ru',
-            # здесь указываете почту, с которой будете отправлять (об этом попозже)
-            recipient_list=['zhigunovam@gmail.com', ]
-            # здесь список получателей. Например, секретарь, сам врач и т. д.
-        )
+        post_create_notify(post)
         return super().form_valid(form)
 
 
@@ -184,3 +179,11 @@ def unsubscribe(request, pk):
     category = Category.objects.get(id=pk)
     category.subscriber.remove(user)
     return redirect('/posts/user/subscribe')
+
+
+# class IndexView(View):
+#     def get(self, request):
+#         printer.apply_async([10],
+#                             eta=timezone.now() + timedelta(seconds=5))
+#         hello.delay()
+#         return HttpResponse('Hello!')

@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth.views import LogoutView
 from .views import PostList, PostDetail, SearchPost, NewsCreate, \
     ArticlesCreate, NewsEdit, ArticlesEdit, NewsDelete, ArticlesDelete, \
-    upgrade_me, Account, Subscription, subscribe, unsubscribe
+    upgrade_me, Account, Subscription, subscribe, unsubscribe, IndexView
 
 urlpatterns = [
    path('', PostList.as_view(), name='posts_list'),
@@ -27,4 +27,5 @@ urlpatterns = [
          name='subscribe'),
    path('<int:pk>/unsubscribe', unsubscribe,
          name='unsubscribe'),
+   # path('test', IndexView.as_view()),
 ]
