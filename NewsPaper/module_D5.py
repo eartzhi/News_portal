@@ -165,6 +165,3 @@ Comment.objects.filter(post=Post.objects.order_by('-rating')
                        .first()).values_list('creation_time__date',
                                              'user__username', 'rating',
                                              'comment_text')
-
-# Endpoint: redis-18698.c302.asia-northeast1-1.gce.cloud.redislabs.com:18698
-# Password: bvcfzU1tUCmnww3W3P7yVc2Li2nUDnGs

@@ -23,7 +23,10 @@ from django.contrib.auth.models import User
 
 
 @shared_task
-def post_create_notify(post, **kwargs):
+def post_create_notify(categories, text, header, **kwargs):
+    post = Post.objects.filter(text=text, header=header).\
+        order_by('-creation_time').first()
+
     html_content = render_to_string(
         'email_notification.html',
         {
@@ -33,13 +36,12 @@ def post_create_notify(post, **kwargs):
         }
     )
     subscribers_emails = []
-    if kwargs['action'] == 'post_add':
-        categories = post.category.all()
 
-        for category in categories:
-            subscribers = category.subscriber.all()
-            for subscriber in subscribers:
-                subscribers_emails += [subscriber.email]
+    for category in categories:
+        subscribers = Category.objects.filter(category=category).\
+            first().subscriber.all()
+        for subscriber in subscribers:
+            subscribers_emails += [subscriber.email]
 
     for email in set(subscribers_emails):
         if email is not None:
@@ -50,6 +52,7 @@ def post_create_notify(post, **kwargs):
                          html_content=html_content)
 
 
+@shared_task
 def weekly_notificator():
     period_end = timezone.now()
     period_start = period_end - datetime.timedelta(days=7)

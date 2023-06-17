@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
 from django.core.mail import send_mail
@@ -14,7 +14,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from .tasks import post_create_notify
-
+from django.utils import timezone
 
 class PostList(ListView):
     model = Post
@@ -26,7 +26,7 @@ class PostList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.\
-            filter(name = 'authors').exists()
+            filter(name='authors').exists()
         return context
 
 
@@ -38,7 +38,7 @@ class PostDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.\
-            filter(name = 'authors').exists()
+            filter(name='authors').exists()
         return context
 
 
@@ -68,7 +68,10 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.post_type = 'N'
-        post_create_notify(post)
+        categories = list(set(form.cleaned_data['category'].values_list('category',
+                                                                   flat=True)))
+        post_create_notify.apply_async([categories, post.text, post.header],
+                                       eta=timezone.now() + timedelta(seconds=10))
         return super().form_valid(form)
 
 
@@ -81,7 +84,10 @@ class ArticlesCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         post = form.save(commit=False)
         post.post_type = 'A'
-        post_create_notify(post)
+        categories = list(set(form.cleaned_data['category'].values_list('category',
+                                                                   flat=True)))
+        post_create_notify.apply_async([categories, post.text, post.header],
+                                       eta=timezone.now() + timedelta(seconds=10))
         return super().form_valid(form)
 
 
@@ -156,6 +162,7 @@ class Account(LoginRequiredMixin, UpdateView):
 #     form_class = SubscriptionForm
 #     model = Category
 #     template_name = 'account_form.html'
+
 
 class Subscription(ListView):
     model = Category
