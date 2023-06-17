@@ -25,7 +25,8 @@ def my_job():
     period_start = period_end - datetime.timedelta(days=7)
     posts = Post.objects.filter(creation_time__gte=period_start)
     subscribers_email = list(set(posts.
-                                 values_list('category__subscriber__email', flat=True)))
+                                 values_list('category__subscriber__email',
+                                             flat=True)))
 
     for email in subscribers_email:
         if email is not None:
