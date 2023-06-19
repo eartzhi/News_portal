@@ -15,7 +15,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./NewsPaper/:/usr/src/app/
-    image: sampleproject
+    image: newspaper
     ports:
       - 8000:8000
     env_file:
@@ -40,6 +40,7 @@ services:
 
   celery-beat:
     build: ./NewsPaper
+    restart: unless-stopped
     command: celery -A NewsPaper beat -l info
     volumes:
       - ./NewsPaper/:/usr/src/app/
