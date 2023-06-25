@@ -1,7 +1,6 @@
 from datetime import timedelta
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
-from django.core.mail import send_mail
 from django.http import HttpResponseForbidden, HttpResponse, Http404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, \
     DeleteView, View
@@ -9,12 +8,12 @@ from .models import Post, Category, Author
 from .filters import PostsFilter
 from .forms import PostsForm, NewsEditForm, ArticlesEditForm, AccountForm
 from django.urls import reverse_lazy
-from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from .tasks import post_create_notify
 from django.utils import timezone
+from django.core.cache import cache
 
 class PostList(ListView):
     model = Post
@@ -40,6 +39,13 @@ class PostDetail(DetailView):
         context['is_not_author'] = not self.request.user.groups.\
             filter(name='authors').exists()
         return context
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs["pk"]}', None)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'post-{self.kwargs["pk"]}', obj)
+        return obj
 
 
 class SearchPost(ListView):
