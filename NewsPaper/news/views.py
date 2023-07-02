@@ -15,6 +15,7 @@ from .tasks import post_create_notify
 from django.utils import timezone
 from django.core.cache import cache
 
+
 class PostList(ListView):
     model = Post
     ordering = 'creation_time'
