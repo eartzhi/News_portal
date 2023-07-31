@@ -31,9 +31,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a72(mkkyt+pm)ebg4(yiv$4eby)*8ll2xwe0rc7c5&r@dmqzwd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -168,6 +168,11 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
 
+
+ADMINS = (
+    ('admin', 'news.portalzhigunov@yandex.ru'),
+)
+
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
@@ -301,7 +306,7 @@ LOGGING = {
             'propagate': False,
         },
         'django.template': {
-            'handlers': ['error_log_h'],
+            'handlers': ['error_log_h', 'email_log_h'],     ######
             'level': 'ERROR',
             'propagate': False,
         },

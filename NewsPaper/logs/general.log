@@ -92,3 +92,20 @@ Traceback (most recent call last):
 django.template.exceptions.TemplateDoesNotExist: search.html, news/post_list.html
 2023-07-31 11:23:09,185 ERROR basehttp-"GET /posts/search HTTP/1.1" 500 145
 2023-07-31 11:25:57,468 INFO autoreload-C:\Projects\News_portal\NewsPaper\NewsPaper\settings.py changed, reloading.
+2023-07-31 11:50:11,366 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 11:50:18,424 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 11:54:30,345 INFO autoreload-C:\Projects\News_portal\NewsPaper\NewsPaper\settings.py changed, reloading.
+2023-07-31 11:54:31,259 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 11:55:10,083 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 11:57:17,546 INFO autoreload-C:\Projects\News_portal\NewsPaper\NewsPaper\settings.py changed, reloading.
+2023-07-31 11:57:18,480 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 11:58:56,680 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 12:07:35,021 INFO autoreload-C:\Projects\News_portal\NewsPaper\NewsPaper\settings.py changed, reloading.
+2023-07-31 12:17:19,848 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 12:18:35,142 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 12:20:34,150 INFO autoreload-C:\Projects\News_portal\NewsPaper\NewsPaper\settings.py changed, reloading.
+2023-07-31 12:20:35,133 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 12:20:48,708 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 12:25:34,103 INFO autoreload-C:\Projects\News_portal\NewsPaper\NewsPaper\settings.py changed, reloading.
+2023-07-31 12:25:34,976 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 12:26:25,967 INFO autoreload-Watching for file changes with StatReloader
