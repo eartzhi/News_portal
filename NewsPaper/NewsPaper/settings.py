@@ -278,7 +278,6 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
-            'filename': f'{os.path.join(BASE_DIR, "logs", "security.log")}',
             'formatter': 'email_log'
         },
     },
