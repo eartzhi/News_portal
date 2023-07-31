@@ -20,8 +20,8 @@ class Command(BaseCommand):
             categories = options['argument']
             for c in categories:
                 posts = Post.objects.filter(
-                    category=Category.objects.filter(category=c).first()
-                                           ).delete()
+                    category=Category.objects.get(category=c)
+                ).delete()
             self.stdout.write(self.style.SUCCESS(
                 f'Статьи и заметки удалены'))
 

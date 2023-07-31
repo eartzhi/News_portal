@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+# import logging
+# import logging.config
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -188,5 +190,131 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(BASE_DIR, 'cache_files'), # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style' : '{',
+    'formatters': {
+        'console_debug': {
+            'format': '%(asctime)s %(levelname)s-%(message)s',
+        },
+        'console_warning': {
+            'format': '%(asctime)s %(levelname)s %(pathname)s-%(message)s',
+        },
+        'console_error': {
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(exc_info)s'
+                      '-%(message)s',
+        },
+        'general_log': {
+            'format': '%(asctime)s %(levelname)s %(module)s-%(message)s'
+        },
+        'error_log': {
+            'format': '%(asctime)s %(levelname)s %(pathname)s '
+                      '%(exc_info)s-%(message)s'
+        },
+        'security_log': {
+            'format': '%(asctime)s %(levelname)s %(module)s-%(message)s'
+        },
+        'email_log': {
+            'format': '%(asctime)s %(levelname)s %(pathname)s-%(message)s'
+        }
+    },
+
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+
+    'handlers': {
+        'console_debug_h': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_debug'
+        },
+        'console_warning_h': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_warning'
+        },
+        'console_error_h': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_error'
+        },
+
+        'general_log_h': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': f'{os.path.join(BASE_DIR, "logs", "general.log")}',
+            'formatter': 'general_log'
+        },
+        'error_log_h': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': f'{os.path.join(BASE_DIR, "logs", "error.log")}',
+            'formatter': 'error_log'
+        },
+        'security_log_h': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': f'{os.path.join(BASE_DIR, "logs", "security.log")}',
+            'formatter': 'security_log'
+        },
+
+        'email_log_h': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filename': f'{os.path.join(BASE_DIR, "logs", "security.log")}',
+            'formatter': 'email_log'
+        },
+    },
+
+
+    'loggers': {
+        'django': {
+            'handlers': ['console_debug_h', 'console_warning_h',
+                         'console_error_h', 'general_log_h'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['error_log_h', 'email_log_h'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['error_log_h'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['error_log_h'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['error_log_h'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security_log_h'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
 }
