@@ -288,32 +288,32 @@ LOGGING = {
             'handlers': ['console_debug_h', 'console_warning_h',
                          'console_error_h', 'general_log_h'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'django.request': {
             'handlers': ['error_log_h', 'email_log_h'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'django.server': {
             'handlers': ['error_log_h'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'django.template': {
             'handlers': ['error_log_h'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'django.db.backends': {
             'handlers': ['error_log_h'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
         'django.security': {
             'handlers': ['security_log_h'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
     }
 }
