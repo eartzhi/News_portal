@@ -172,6 +172,7 @@ ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
 ADMINS = (
     ('admin', 'news.portalzhigunov@yandex.ru'),
 )
+SERVER_EMAIL = 'news.portalzhigunov@yandex.ru'
 
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
@@ -306,7 +307,7 @@ LOGGING = {
             'propagate': False,
         },
         'django.template': {
-            'handlers': ['error_log_h', 'email_log_h'],     ######
+            'handlers': ['error_log_h'],
             'level': 'ERROR',
             'propagate': False,
         },

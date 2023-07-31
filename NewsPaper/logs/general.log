@@ -109,3 +109,6 @@ django.template.exceptions.TemplateDoesNotExist: search.html, news/post_list.htm
 2023-07-31 12:25:34,103 INFO autoreload-C:\Projects\News_portal\NewsPaper\NewsPaper\settings.py changed, reloading.
 2023-07-31 12:25:34,976 INFO autoreload-Watching for file changes with StatReloader
 2023-07-31 12:26:25,967 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 12:34:53,654 INFO autoreload-Watching for file changes with StatReloader
+2023-07-31 12:36:05,691 INFO autoreload-C:\Projects\News_portal\NewsPaper\NewsPaper\settings.py changed, reloading.
+2023-07-31 12:36:06,893 INFO autoreload-Watching for file changes with StatReloader
