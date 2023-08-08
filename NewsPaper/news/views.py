@@ -10,11 +10,12 @@ from .forms import PostsForm, NewsEditForm, ArticlesEditForm, AccountForm
 from django.urls import reverse_lazy
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from .tasks import post_create_notify
 from django.utils import timezone
 from django.core.cache import cache
-
+from django.utils.translation import gettext
+import pytz
 
 class PostList(ListView):
     model = Post
@@ -28,6 +29,22 @@ class PostList(ListView):
         context['is_not_author'] = not self.request.user.groups.\
             filter(name='authors').exists()
         return context
+
+    # def get(self, request):
+    #     curent_time = timezone.now()
+    #
+    #     context = {
+    #         'current_time': timezone.now(),
+    #         'timezones': pytz.common_timezones
+    #         # добавляем в контекст все доступные часовые пояса
+    #     }
+    #
+    #     return HttpResponse(render(request, 'posts.html', context))
+    #
+    # #  по пост-запросу будем добавлять в сессию часовой пояс, который и будет обрабатываться написанным нами ранее middleware
+    # def post(self, request):
+    #     request.session['django_timezone'] = request.POST['timezone']
+    #     return redirect('/posts/')
 
 
 class PostDetail(DetailView):
@@ -121,7 +138,9 @@ class NewsDelete(DeleteView):
         post = self.get_object()
         if post.post_type != 'N':
             return HttpResponseForbidden(
+                gettext(
                 "По этой ссылке вы можете удалить только новость"
+                )
             )
         else:
             return super().form_valid(form)
@@ -136,7 +155,9 @@ class ArticlesDelete(DeleteView):
         post = self.get_object()
         if post.post_type != 'A':
             return HttpResponseForbidden(
+                gettext(
                 "По этой ссылке вы можете удалить только статью"
+                )
             )
         else:
             return super().form_valid(form)
@@ -201,3 +222,4 @@ def unsubscribe(request, pk):
 #                             eta=timezone.now() + timedelta(seconds=5))
 #         hello.delay()
 #         return HttpResponse('Hello!')
+

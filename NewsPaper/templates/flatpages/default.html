@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load cache %}
+{% load i18n %}
+{% load tz %}
     <head>
         {% cache 20 head %}
         <meta charset="utf-8" />
@@ -12,27 +14,58 @@
         {% load static %}
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
             <title>{% block title %} {% endblock title %}</title>
+        <style>
+        body {background-color: {% if current_time.hour >= 23 or current_time.hour <= 7 %} darkcyan {% else %} powderblue {% endif %};}
+        </style>
     </head>
     <body>
-        <!-- Navigation-->
-       {% cache 20 authorisation %}
+        <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}" />
+    <select name="language">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+            <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+                {{ language.name_local }} ({{ language.code }})
+            </option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="{% trans 'Change' %}" />
+        </form>
+            {% get_current_timezone as TIME_ZONE %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label for="timezone">Time zone:</label>
+        <select name="timezone">
+            {% for tz in timezones %}
+            <option value="{{ tz }}"{% if tz == TIME_ZONE %} selected{% endif %}>{{ tz }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Set">
+    </form>
+
+    {{ TIME_ZONE }}
+    {{ current_time|timezone:TIME_ZONE }} <!-- Отображаем время в выбранном часовом поясе  -->
+<!-- Navigation-->
+       <!--{% cache 20 authorisation %}-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="/about">Ух ты новости&copy;</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Оглавление</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about">О нас</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">{% trans 'Оглавление' %}</a></li>
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="/about">{% trans "О нас" %}</a></li>
                            {% if request.user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="/posts/logout/"> Выйти </a></li>
-                        <li class="nav-item"><a class="nav-link" href="/posts/user/{{ request.user.id }}"> Личный кабинет </a></li>
-                        <li class="nav-item"><a class="nav-link" href="/posts/user/subscribe"> Подписки </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/posts/logout/"> {% trans "Выйти" %} </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/posts/user/{{ request.user.id }}"> {% trans "Личный кабинет" %}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/posts/user/subscribe">{% trans  "Подписки" %} </a></li>
                            {% else %}
-                        <li class="nav-item"><a class="nav-link" href="/accounts/login/"> Войти </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/accounts/login/"> {% trans "Войти" %} </a></li>
                            {% endif %}
                            {% if is_not_author %}
-                        <li class="nav-item"><a class="nav-link" href="/posts/upgrade/"> Стать автором </a></li>
+                        <li class="nav-item"><a class="nav-link" href="/posts/upgrade/"> {% trans "Стать автором" %} </a></li>
                            {% endif %}
                         <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
                     </ul>
@@ -40,7 +73,7 @@
                     </form>
                 </div>
             </div>
-        {% endcache %}
+        <!-- {% endcache %} -->
         </nav>
         <!-- Product section-->
         <section class="py-5">

@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Post, PostCategory, Comment
+from .models import Post, PostCategory, Comment, Category
+from modeltranslation.admin import TranslationAdmin
+# импортируем модель амдинки (вспоминаем модуль про переопределение стандартных админ-инструментов)
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -23,7 +25,16 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('user',) # тут всё очень похоже на фильтры из запросов в базу
 
 
+class CategoryAdmin(TranslationAdmin):
+    model = Category
+
+
+class PostTransAdmin(TranslationAdmin):
+    model = Post
+
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(PostCategory, PostCategoryAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(Category)
 
