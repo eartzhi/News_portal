@@ -45,8 +45,7 @@ class Post(models.Model):
         (NEWS, 'Новость')
     ]
 
-    author = models.ForeignKey(Author, on_delete=models.SET_DEFAULT,
-                               default='Неизвестен')
+    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True)
     post_type = models.CharField(max_length=1, choices=POST_TYPE_CHOISE)
     creation_time = models.DateTimeField(auto_now_add=True)
     category = models.ManyToManyField(Category, through='PostCategory')

@@ -1,4 +1,6 @@
 from datetime import timedelta
+
+import django_filters
 from django.contrib.auth.mixins import LoginRequiredMixin, \
     PermissionRequiredMixin
 from django.http import HttpResponseForbidden, HttpResponse, Http404
@@ -16,6 +18,12 @@ from django.utils import timezone
 from django.core.cache import cache
 from django.utils.translation import gettext
 import pytz
+from django.shortcuts import render
+from rest_framework import viewsets
+from rest_framework import permissions
+
+from .serializers import *
+from .models import *
 
 class PostList(ListView):
     model = Post
@@ -222,4 +230,34 @@ def unsubscribe(request, pk):
 #                             eta=timezone.now() + timedelta(seconds=5))
 #         hello.delay()
 #         return HttpResponse('Hello!')
+
+
+class NewsViewset(viewsets.ModelViewSet):
+    queryset = Post.objects.filter(post_type='N').all()
+    serializer_class = PostSerializer
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = ["category", "author",]
+
+    # def list(self, request):
+    #     permission_classes = [permissions.AllowAny]
+    #     return super().list(request)
+
+    # def create(self, request):
+    #     permission_classes = [permissions.IsAuthenticated]
+    #     return super().create(request)
+    #
+    # def partial_update(self, request):
+    #     permission_classes = [permissions.IsAuthenticated]
+    #     return super().put(request)
+    #
+    # def destroy(self, request):
+    #     permission_classes = [permissions.IsAuthenticated]
+    #     return super().delete(request)
+
+
+class ArticleViewset(viewsets.ModelViewSet):
+    queryset = Post.objects.filter(post_type='A').all()
+    serializer_class = PostSerializer
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = ["category", "author"]
 
